@@ -1,0 +1,1601 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ÉosGuri.BET</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #ffd700;
+        }
+
+        .casino-logo {
+            height: 120px; /* Slightly larger logo */
+            margin-right: auto; /* Pushes balance and menu to the right */
+        }
+
+        .balance {
+            font-size: 28px; /* Increased size for balance */
+            color: #ffd700;
+            margin: 0 auto; /* Centers the balance */
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .recharge-menu-container {
+            position: relative;
+            margin-left: auto; /* Pushes menu to the right */
+        }
+
+        .menu-icon {
+            font-size: 120px; /* Match logo height */
+            cursor: pointer;
+            margin-left: 20px;
+        }
+
+        .recharge-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #ffd700;
+            border-radius: 8px;
+            padding: 15px;
+            z-index: 100;
+            display: none; /* Initially hidden */
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .recharge-menu h4 {
+            margin-top: 0;
+            color: #ffd700;
+        }
+
+        .recharge-menu input[type="number"] {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            background-color: #333;
+            color: white;
+        }
+
+        .recharge-menu button {
+            padding: 8px 15px;
+            background-color: #ffd700;
+            color: black;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .games-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+            border-color: #ffd700;
+        }
+
+        .game-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #ffd700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .bet-controls {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .bet-input {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            width: 120px;
+        }
+
+        .bet-input option {
+            background: #1a1a2e;
+            color: white;
+            padding: 5px;
+        }
+
+        .bet-input:focus {
+            outline: none;
+            border-color: #ffd700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            color: #1a1a2e;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .game-area {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cards {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            width: 60px;
+            height: 84px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: black;
+            font-size: 14px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .card.red {
+            color: #e74c3c;
+        }
+
+        .dice {
+            width: 50px;
+            height: 50px;
+            background: white;
+            color: black;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .roulette-wheel {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: conic-gradient(
+                #e74c3c 0deg 20deg,
+                #2c3e50 20deg 40deg,
+                #e74c3c 40deg 60deg,
+                #2c3e50 60deg 80deg,
+                #e74c3c 80deg 100deg,
+                #2c3e50 100deg 120deg,
+                #e74c3c 120deg 140deg,
+                #2c3e50 140deg 160deg,
+                #e74c3c 160deg 180deg,
+                #2c3e50 180deg 200deg,
+                #e74c3c 200deg 220deg,
+                #2c3e50 220deg 240deg,
+                #e74c3c 240deg 260deg,
+                #2c3e50 260deg 280deg,
+                #e74c3c 280deg 300deg,
+                #2c3e50 300deg 320deg,
+                #e74c3c 320deg 340deg,
+                #2c3e50 340deg 360deg
+            );
+            position: relative;
+            margin: 20px auto;
+            transition: transform 1.5s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+        }
+
+        .roulette-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            background: #ffd700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: black;
+        }
+
+        .slots {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .slot-reel {
+            width: 80px;
+            height: 100px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.5s ease;
+        }
+
+        .result {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .win {
+            background: rgba(39, 174, 96, 0.3);
+            color: #2ecc71;
+            border: 1px solid #2ecc71;
+        }
+
+        .lose {
+            background: rgba(231, 76, 60, 0.3);
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+
+        .push {
+            background: rgba(241, 196, 15, 0.3);
+            color: #f1c40f;
+            border: 1px solid #f1c40f;
+        }
+
+        .quick-bet {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+
+        .quick-bet-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quick-bet-btn:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+        }
+
+        @media (max-width: 768px) {
+            .games-container {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+            
+            .bet-controls {
+                justify-content: center;
+            }
+        }
+
+        .mine-tile {
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .mine-tile:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .mine-tile[data-state="revealed"] {
+            cursor: default;
+        }
+
+        .crash-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Specific styles for Crash game elements */
+        #crash-graph {
+            background-color: rgba(0, 0, 0, 0.2);
+            margin: 10px auto;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="C:\SimuadorDeCasino\Logo.png" alt="ÉosGuri.BET" class="casino-logo">
+        <div class="balance">Saldo: $<span id="balance">10000</span></div>
+        <div class="recharge-menu-container">
+            <div class="menu-icon" onclick="toggleRechargeMenu()">💰</div>
+            <div class="recharge-menu" id="recharge-menu">
+                <h4>Recarga Personalizada</h4>
+                <input type="number" id="recharge-amount" placeholder="Valor" min="10">
+                <button onclick="addBalance()">Adicionar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="games-container">
+        <!-- Blackjack -->
+        <div class="game-card">
+            <h2 class="game-title">♠️ Blackjack ♠️</h2>
+            <div class="bet-controls">
+                <input type="number" class="bet-input" id="blackjack-bet" placeholder="Aposta" min="1" value="100">
+                <div class="quick-bet">
+                    <button class="quick-bet-btn" onclick="setBet('blackjack', 50)">$50</button>
+                    <button class="quick-bet-btn" onclick="setBet('blackjack', 100)">$100</button>
+                    <button class="quick-bet-btn" onclick="setBet('blackjack', 500)">$500</button>
+                </div>
+            </div>
+            <div class="game-area">
+                <div>
+                    <div>Dealer: <span id="dealer-score">0</span></div>
+                    <div class="cards" id="dealer-cards"></div>
+                </div>
+                <div>
+                    <div>Você: <span id="player-score">0</span></div>
+                    <div class="cards" id="player-cards"></div>
+                </div>
+            </div>
+            <div>
+                <button class="btn" onclick="startBlackjack()">Nova Mão</button>
+                <button class="btn" id="hit-btn" onclick="hit()" disabled>Hit</button>
+                <button class="btn" id="stand-btn" onclick="stand()" disabled>Stand</button>
+            </div>
+            <div id="blackjack-result" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Dados -->
+        <div class="game-card">
+            <h2 class="game-title">🎲 Dados 🎲</h2>
+            <div class="bet-controls">
+                <input type="number" class="bet-input" id="dice-bet" placeholder="Aposta" min="1" value="100">
+                <select class="bet-input" id="dice-prediction">
+                    <option value="7">Exato 7 (5x)</option>
+                    <option value="high">Alto (8-12) (2x)</option>
+                    <option value="low">Baixo (2-6) (2x)</option>
+                    <option value="even">Par (2x)</option>
+                    <option value="odd">Ímpar (2x)</option>
+                </select>
+            </div>
+            <div class="game-area">
+                <div style="display: flex; justify-content: center;">
+                    <div class="dice" id="dice1">?</div>
+                    <div class="dice" id="dice2">?</div>
+                </div>
+                <div style="margin: 15px 0; font-size: 20px;">
+                    Total: <span id="dice-total">0</span>
+                </div>
+            </div>
+            <button class="btn" onclick="rollDice()">Rolar Dados</button>
+            <div id="dice-result" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Roleta -->
+        <div class="game-card">
+            <h2 class="game-title">🎯 Roleta 🎯</h2>
+            <div class="bet-controls">
+                <input type="number" class="bet-input" id="roulette-bet" placeholder="Aposta" min="1" value="100">
+                <select class="bet-input" id="roulette-type">
+                    <option value="red">Vermelho (2x)</option>
+                    <option value="black">Preto (2x)</option>
+                    <option value="even">Par (2x)</option>
+                    <option value="odd">Ímpar (2x)</option>
+                    <option value="low">Baixo 1-18 (2x)</option>
+                    <option value="high">Alto 19-36 (2x)</option>
+                </select>
+            </div>
+            <div class="game-area">
+                <div class="roulette-wheel" id="roulette-wheel">
+                    <div class="roulette-center" id="roulette-number">0</div>
+                </div>
+            </div>
+            <button class="btn" onclick="spinRoulette()">Girar Roleta</button>
+            <div id="roulette-result" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Caça-níqueis -->
+        <div class="game-card">
+            <h2 class="game-title">🍒 Caça-Níqueis 🍒</h2>
+            <div class="bet-controls">
+                <input type="number" class="bet-input" id="slots-bet" placeholder="Aposta" min="1" value="100">
+                <div class="quick-bet">
+                    <button class="quick-bet-btn" onclick="setBet('slots', 25)">$25</button>
+                    <button class="quick-bet-btn" onclick="setBet('slots', 100)">$100</button>
+                    <button class="quick-bet-btn" onclick="setBet('slots', 250)">$250</button>
+                </div>
+                <button class="quick-bet-btn" id="slots-turbo-btn" onclick="toggleSlotsTurbo()">Modo Turbo: OFF</button>
+            </div>
+            <div class="game-area">
+                <div class="slots">
+                    <div class="slot-reel" id="slot1">🍒</div>
+                    <div class="slot-reel" id="slot2">🍋</div>
+                    <div class="slot-reel" id="slot3">🍊</div>
+                </div>
+                <div style="font-size: 14px; text-align: center; margin-top: 10px;">
+                    🍒🍒🍒 = 10x | 🍋🍋🍋 = 8x | 🍊🍊🍊 = 6x<br>
+                    💎💎💎 = 20x | 7️⃣7️⃣7️⃣ = 50x
+                </div>
+            </div>
+            <button class="btn" onclick="spinSlots()">Girar</button>
+            <div id="slots-result" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Coin Flip -->
+        <div class="game-card">
+            <h2 class="game-title">🪙 Cara ou Coroa 🪙</h2>
+            <div class="bet-controls">
+                <input type="number" class="bet-input" id="coin-bet" placeholder="Aposta" min="1" value="100">
+                <select class="bet-input" id="coin-choice">
+                    <option value="heads">Cara</option>
+                    <option value="tails">Coroa</option>
+                </select>
+            </div>
+            <div class="game-area">
+                <div style="font-size: 80px; margin: 20px;" id="coin-display">🪙</div>
+                <div id="coin-flip-result" style="font-size: 18px;"></div>
+            </div>
+            <button class="btn" onclick="flipCoin()">Lançar Moeda</button>
+            <div id="coin-result" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Hi-Lo -->
+        <div class="game-card">
+            <h2 class="game-title">📈 Hi-Lo 📉</h2>
+            <div class="bet-controls">
+                <input type="number" class="bet-input" id="hilo-bet" placeholder="Aposta" min="1" value="100">
+            </div>
+            <div class="game-area">
+                <div style="font-size: 18px; margin: 10px;">
+                    Carta atual: <span id="current-card-display">?</span>
+                </div>
+                <div style="font-size: 16px; margin: 10px;">
+                    Próxima carta será:
+                </div>
+                <div style="display: flex; gap: 15px; justify-content: center; margin: 15px 0;">
+                    <button class="btn" onclick="guessHiLo('higher')">Maior</button>
+                    <button class="btn" onclick="guessHiLo('lower')">Menor</button>
+                </div>
+                <div style="font-size: 16px;">
+                    Sequência: <span id="hilo-streak">0</span> | Multiplicador: <span id="hilo-multiplier">1x</span>
+                </div>
+            </div>
+            <button class="btn" onclick="startHiLo()">Novo Jogo</button>
+            <button class="btn" onclick="cashoutHiLo()" id="cashout-btn" disabled>Retirar</button>
+            <div id="hilo-result" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Mines -->
+        <div class="game-card">
+            <h2 class="game-title">💣 Mines 💣</h2>
+            <div class="bet-controls">
+                <input type="number" class="bet-input" id="mines-bet" placeholder="Aposta" min="1" value="100">
+                <select class="bet-input" id="mines-count">
+                    <option value="3">3 Minas</option>
+                    <option value="5">5 Minas</option>
+                    <option value="8">8 Minas</option>
+                    <option value="10">10 Minas</option>
+                </select>
+            </div>
+            <div style="font-size: 18px; margin-bottom: 15px;">
+                Multiplicador Atual: <span id="mines-multiplier">1x</span>
+            </div>
+            <div class="game-area" id="mines-area">
+                <!-- Mines grid will be generated here by JS -->
+            </div>
+            <button class="btn" id="mines-start-btn" onclick="startMines()">Iniciar Jogo</button>
+            <button class="btn" id="mines-cashout-btn" onclick="cashoutMines()" disabled>Retirar</button>
+            <div id="mines-result" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Number Guess -->
+        <div class="game-card">
+            <h2 class="game-title">🔢 Adivinhe o Número 🔢</h2>
+            <div class="bet-controls">
+                <input type="number" class="bet-input" id="guess-bet" placeholder="Aposta" min="1" value="100">
+                <input type="number" class="bet-input" id="guess-number" placeholder="Seu Palpite (1-100)" min="1" max="100">
+            </div>
+            <div class="game-area">
+                <p id="guess-feedback" style="font-size: 18px;">Adivinhe um número entre 1 e 100.</p>
+            </div>
+            <button class="btn" onclick="makeGuess()">Adivinhar</button>
+            <div id="guess-result" class="result" style="display: none;"></div>
+        </div>
+
+        <!-- Crash (Aviator) -->
+        <div class="game-card">
+            <h2 class="game-title">✈️ Crash ✈️</h2>
+            <div class="bet-controls">
+                <input type="number" class="bet-input" id="crash-bet" placeholder="Aposta" min="1" value="100">
+                <input type="number" class="bet-input" id="crash-auto-cashout" placeholder="Auto Retirar (opcional)" min="1.01" step="0.01">
+            </div>
+            <div class="game-area">
+                <div style="font-size: 40px; font-weight: bold;" id="crash-multiplier">1.00x</div>
+                <canvas id="crash-graph" width="300" height="150" style="border:1px solid #ffd700; margin: 10px 0;"></canvas>
+                <div class="crash-buttons">
+                    <button class="btn" id="crash-place-bet-btn" onclick="placeCrashBet()">Fazer Aposta</button>
+                    <button class="btn" id="crash-cashout-btn" onclick="cashoutCrash()" disabled>Retirar</button>
+                </div>
+            </div>
+            <div id="crash-result" class="result" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        let balance = 10000;
+        let gameStates = {
+            blackjack: { deck: [], playerCards: [], dealerCards: [], gameActive: false },
+            hilo: { currentCard: null, streak: 0, multiplier: 1, gameActive: false, deck: [] },
+            mines: { grid: [], mines: [], gameActive: false, bet: 0, clearedTiles: 0, minesCount: 0 },
+            numberGuess: { targetNumber: null, gameActive: false },
+            crash: { gameActive: false, bet: 0, autoCashout: 0, currentMultiplier: 1.00, crashPoint: 0, gameInterval: null, playerInRound: false,
+                    graphPoints: [],
+                    previousCrashPoint: 0 // Store the crash point of the previous round
+                }
+        };
+
+        let slotsTurbo = false; // State for slots turbo mode
+
+        function updateBalance() {
+            document.getElementById('balance').textContent = balance.toLocaleString();
+        }
+
+        function resetBalance() {
+            balance = 10000;
+            updateBalance();
+        }
+
+        function setBet(game, amount) {
+            document.getElementById(game + '-bet').value = amount;
+        }
+
+        function showResult(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `result ${type}`;
+            element.style.display = 'block';
+            setTimeout(() => {
+                element.style.display = 'none';
+            }, 3000);
+        }
+
+        // Blackjack
+        function createDeck() {
+            const suits = ['♠', '♥', '♦', '♣'];
+            const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+            const deck = [];
+            
+            for (let suit of suits) {
+                for (let value of values) {
+                    deck.push({ suit, value, numValue: getCardValue(value) });
+                }
+            }
+            
+            return shuffleDeck(deck);
+        }
+
+        function shuffleDeck(deck) {
+            for (let i = deck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+            return deck;
+        }
+
+        function getCardValue(value) {
+            if (value === 'A') return 11;
+            if (['J', 'Q', 'K'].includes(value)) return 10;
+            return parseInt(value);
+        }
+
+        function calculateScore(cards) {
+            let score = 0;
+            let aces = 0;
+            
+            for (let card of cards) {
+                score += card.numValue;
+                if (card.value === 'A') aces++;
+            }
+            
+            while (score > 21 && aces > 0) {
+                score -= 10;
+                aces--;
+            }
+            
+            return score;
+        }
+
+        function displayCards(cards, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            cards.forEach(card => {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'card';
+                if (card.suit === '♥' || card.suit === '♦') {
+                    cardDiv.classList.add('red');
+                }
+                cardDiv.textContent = `${card.value}${card.suit}`;
+                container.appendChild(cardDiv);
+            });
+        }
+
+        function startBlackjack() {
+            const bet = parseInt(document.getElementById('blackjack-bet').value) || 0;
+            if (bet <= 0 || bet > balance) {
+                alert('Aposta inválida!');
+                return;
+            }
+
+            balance -= bet;
+            updateBalance();
+
+            gameStates.blackjack.deck = createDeck();
+            gameStates.blackjack.playerCards = [
+                gameStates.blackjack.deck.pop(),
+                gameStates.blackjack.deck.pop()
+            ];
+            gameStates.blackjack.dealerCards = [
+                gameStates.blackjack.deck.pop(),
+                gameStates.blackjack.deck.pop()
+            ];
+            gameStates.blackjack.gameActive = true;
+
+            displayCards(gameStates.blackjack.playerCards, 'player-cards');
+            displayCards([gameStates.blackjack.dealerCards[0]], 'dealer-cards');
+
+            const playerScore = calculateScore(gameStates.blackjack.playerCards);
+            document.getElementById('player-score').textContent = playerScore;
+            document.getElementById('dealer-score').textContent = gameStates.blackjack.dealerCards[0].numValue;
+
+            document.getElementById('hit-btn').disabled = false;
+            document.getElementById('stand-btn').disabled = false;
+
+            if (playerScore === 21) {
+                stand();
+            }
+        }
+
+        function hit() {
+            if (!gameStates.blackjack.gameActive) return;
+
+            gameStates.blackjack.playerCards.push(gameStates.blackjack.deck.pop());
+            displayCards(gameStates.blackjack.playerCards, 'player-cards');
+
+            const playerScore = calculateScore(gameStates.blackjack.playerCards);
+            document.getElementById('player-score').textContent = playerScore;
+
+            if (playerScore > 21) {
+                endBlackjack('lose', 'Estourou! Você perdeu.');
+            } else if (playerScore === 21) {
+                stand();
+            }
+        }
+
+        function stand() {
+            if (!gameStates.blackjack.gameActive) return;
+
+            displayCards(gameStates.blackjack.dealerCards, 'dealer-cards');
+            let dealerScore = calculateScore(gameStates.blackjack.dealerCards);
+            document.getElementById('dealer-score').textContent = dealerScore;
+
+            while (dealerScore < 17) {
+                gameStates.blackjack.dealerCards.push(gameStates.blackjack.deck.pop());
+                dealerScore = calculateScore(gameStates.blackjack.dealerCards);
+                displayCards(gameStates.blackjack.dealerCards, 'dealer-cards');
+                document.getElementById('dealer-score').textContent = dealerScore;
+            }
+
+            const playerScore = calculateScore(gameStates.blackjack.playerCards);
+            const bet = parseInt(document.getElementById('blackjack-bet').value);
+
+            if (dealerScore > 21) {
+                endBlackjack('win', `Dealer estourou! Você ganhou $${bet * 2}!`);
+                balance += bet * 2;
+            } else if (playerScore > dealerScore) {
+                endBlackjack('win', `Você ganhou $${bet * 2}!`);
+                balance += bet * 2;
+            } else if (playerScore === dealerScore) {
+                endBlackjack('push', 'Empate! Aposta devolvida.');
+                balance += bet;
+            } else {
+                endBlackjack('lose', 'Dealer ganhou!');
+            }
+
+            updateBalance();
+        }
+
+        function endBlackjack(result, message) {
+            gameStates.blackjack.gameActive = false;
+            document.getElementById('hit-btn').disabled = true;
+            document.getElementById('stand-btn').disabled = true;
+            showResult('blackjack-result', message, result);
+        }
+
+        // Dados
+        function rollDice() {
+            const bet = parseInt(document.getElementById('dice-bet').value) || 0;
+            if (bet <= 0 || bet > balance) {
+                alert('Aposta inválida!');
+                return;
+            }
+
+            balance -= bet;
+            updateBalance();
+
+            const dice1 = Math.floor(Math.random() * 6) + 1;
+            const dice2 = Math.floor(Math.random() * 6) + 1;
+            const total = dice1 + dice2;
+            const prediction = document.getElementById('dice-prediction').value;
+
+            document.getElementById('dice1').textContent = dice1;
+            document.getElementById('dice2').textContent = dice2;
+            document.getElementById('dice-total').textContent = total;
+
+            let won = false;
+            let multiplier = 1;
+
+            switch (prediction) {
+                case '7':
+                    won = total === 7;
+                    multiplier = 5;
+                    break;
+                case 'high':
+                    won = total >= 8;
+                    multiplier = 2;
+                    break;
+                case 'low':
+                    won = total <= 6;
+                    multiplier = 2;
+                    break;
+                case 'even':
+                    won = total % 2 === 0;
+                    multiplier = 2;
+                    break;
+                case 'odd':
+                    won = total % 2 === 1;
+                    multiplier = 2;
+                    break;
+            }
+
+            if (won) {
+                const winAmount = bet * multiplier;
+                balance += winAmount;
+                showResult('dice-result', `Você ganhou $${winAmount}!`, 'win');
+            } else {
+                showResult('dice-result', 'Você perdeu!', 'lose');
+            }
+
+            updateBalance();
+        }
+
+        // Roleta
+        function spinRoulette() {
+            const bet = parseInt(document.getElementById('roulette-bet').value) || 0;
+            if (bet <= 0 || bet > balance) {
+                alert('Aposta inválida!');
+                return;
+            }
+
+            balance -= bet;
+            updateBalance();
+
+            const number = Math.floor(Math.random() * 37); // 0-36
+            const betType = document.getElementById('roulette-type').value;
+            const wheel = document.getElementById('roulette-wheel');
+            
+            // Reset da animação - força o recálculo do CSS
+            wheel.style.transform = 'rotate(0deg)';
+            wheel.style.transition = 'none';
+            
+            // Pequeno delay para garantir que o reset aconteça
+            setTimeout(() => {
+                wheel.style.transition = 'transform 3s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
+                
+                // Animação da roleta com rotações extras para efeito visual
+                const rotation = (number * 9.73) + 360 * 5 + Math.random() * 360; // 9.73 graus por número (360/37)
+                wheel.style.transform = `rotate(${rotation}deg)`;
+                
+                setTimeout(() => {
+                    document.getElementById('roulette-number').textContent = number;
+                    
+                    let won = false;
+                    const isRed = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36].includes(number);
+                    const isEven = number % 2 === 0 && number !== 0;
+                    
+                    switch (betType) {
+                        case 'red':
+                            won = isRed;
+                            break;
+                        case 'black':
+                            won = !isRed && number !== 0;
+                            break;
+                        case 'even':
+                            won = isEven;
+                            break;
+                        case 'odd':
+                            won = !isEven && number !== 0;
+                            break;
+                        case 'low':
+                            won = number >= 1 && number <= 18;
+                            break;
+                        case 'high':
+                            won = number >= 19 && number <= 36;
+                            break;
+                    }
+
+                    if (won) {
+                        const winAmount = bet * 2;
+                        balance += winAmount;
+                        showResult('roulette-result', `Número ${number}! Você ganhou ${winAmount}!`, 'win');
+                    } else {
+                        showResult('roulette-result', `Número ${number}! Você perdeu!`, 'lose');
+                    }
+
+                    updateBalance();
+                }, 1600);
+            }, 50);
+        }
+
+        // Caça-níqueis
+        function spinSlots() {
+            const bet = parseInt(document.getElementById('slots-bet').value) || 0;
+            if (bet <= 0 || bet > balance) {
+                alert('Aposta inválida!');
+                return;
+            }
+
+            balance -= bet;
+            updateBalance();
+
+            const symbols = ['🍒', '🍋', '🍊', '🍇', '💎', '7️⃣'];
+            const reels = ['slot1', 'slot2', 'slot3'];
+            const results = [];
+
+            if (slotsTurbo) {
+                // Turbo mode: skip animation
+                reels.forEach(reel => {
+                    const element = document.getElementById(reel);
+                    const finalSymbol = symbols[Math.floor(Math.random() * symbols.length)];
+                    element.textContent = finalSymbol;
+                    results.push(finalSymbol);
+                });
+                checkSlotsWin(results, bet);
+            } else {
+                // Normal mode: play animation
+                reels.forEach((reel, index) => {
+                    const element = document.getElementById(reel);
+                    let spins = 0;
+                    const interval = setInterval(() => {
+                        element.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                        spins++;
+                        if (spins >= 20 + (index * 10)) {
+                            clearInterval(interval);
+                            const finalSymbol = symbols[Math.floor(Math.random() * symbols.length)];
+                            element.textContent = finalSymbol;
+                            results.push(finalSymbol);
+                            
+                            if (results.length === 3) {
+                                checkSlotsWin(results, bet);
+                            }
+                        }
+                    }, 100);
+                });
+            }
+        }
+
+        function checkSlotsWin(results, bet) {
+            let multiplier = 0;
+            
+            if (results[0] === results[1] && results[1] === results[2]) {
+                switch (results[0]) {
+                    case '🍒':
+                        multiplier = 10;
+                        break;
+                    case '🍋':
+                        multiplier = 8;
+                        break;
+                    case '🍊':
+                        multiplier = 6;
+                        break;
+                    case '🍇':
+                        multiplier = 4;
+                        break;
+                    case '💎':
+                        multiplier = 20;
+                        break;
+                    case '7️⃣':
+                        multiplier = 50;
+                        break;
+                }
+            }
+
+            if (multiplier > 0) {
+                const winAmount = bet * multiplier;
+                balance += winAmount;
+                showResult('slots-result', `JACKPOT! ${results.join('')} - Você ganhou ${winAmount}!`, 'win');
+            } else {
+                showResult('slots-result', `${results.join('')} - Você perdeu!`, 'lose');
+            }
+
+            updateBalance();
+        }
+
+        // Cara ou Coroa
+        function flipCoin() {
+            const bet = parseInt(document.getElementById('coin-bet').value) || 0;
+            if (bet <= 0 || bet > balance) {
+                alert('Aposta inválida!');
+                return;
+            }
+
+            balance -= bet;
+            updateBalance();
+
+            const choice = document.getElementById('coin-choice').value;
+            const coin = document.getElementById('coin-display');
+            const result = Math.random() < 0.5 ? 'heads' : 'tails';
+            
+            // Animação da moeda
+            let flips = 0;
+            const flipInterval = setInterval(() => {
+                coin.textContent = Math.random() < 0.5 ? '👑' : '🪙';
+                flips++;
+                if (flips >= 10) {
+                    clearInterval(flipInterval);
+                    coin.textContent = result === 'heads' ? '👑' : '🪙';
+                    document.getElementById('coin-flip-result').textContent = 
+                        result === 'heads' ? 'CARA!' : 'COROA!';
+                    
+                    if (choice === result) {
+                        const winAmount = bet * 2;
+                        balance += winAmount;
+                        showResult('coin-result', `Você ganhou ${winAmount}!`, 'win');
+                    } else {
+                        showResult('coin-result', 'Você perdeu!', 'lose');
+                    }
+                    
+                    updateBalance();
+                }
+            }, 150);
+        }
+
+        // Hi-Lo
+        function startHiLo() {
+            const bet = parseInt(document.getElementById('hilo-bet').value) || 0;
+            if (bet <= 0 || bet > balance) {
+                alert('Aposta inválida!');
+                return;
+            }
+
+            balance -= bet;
+            updateBalance();
+
+            gameStates.hilo.deck = createDeck();
+            gameStates.hilo.currentCard = gameStates.hilo.deck.pop();
+            gameStates.hilo.streak = 0;
+            gameStates.hilo.multiplier = 1;
+            gameStates.hilo.gameActive = true;
+            gameStates.hilo.baseBet = bet;
+
+            document.getElementById('current-card-display').textContent = 
+                `${gameStates.hilo.currentCard.value}${gameStates.hilo.currentCard.suit}`;
+            document.getElementById('hilo-streak').textContent = gameStates.hilo.streak;
+            document.getElementById('hilo-multiplier').textContent = gameStates.hilo.multiplier + 'x';
+            document.getElementById('cashout-btn').disabled = true;
+        }
+
+        function guessHiLo(guess) {
+            if (!gameStates.hilo.gameActive || gameStates.hilo.deck.length === 0) return;
+
+            const nextCard = gameStates.hilo.deck.pop();
+            const currentValue = getCardNumericValue(gameStates.hilo.currentCard);
+            const nextValue = getCardNumericValue(nextCard);
+
+            let correct = false;
+            if (guess === 'higher' && nextValue > currentValue) correct = true;
+            if (guess === 'lower' && nextValue < currentValue) correct = true;
+
+            if (correct) {
+                gameStates.hilo.streak++;
+                gameStates.hilo.multiplier = Math.pow(1.5, gameStates.hilo.streak);
+                document.getElementById('hilo-streak').textContent = gameStates.hilo.streak;
+                document.getElementById('hilo-multiplier').textContent = gameStates.hilo.multiplier.toFixed(1) + 'x';
+                document.getElementById('cashout-btn').disabled = false;
+                
+                showResult('hilo-result', 
+                    `Correto! ${nextCard.value}${nextCard.suit} - Sequência: ${gameStates.hilo.streak}`, 'win');
+            } else {
+                showResult('hilo-result', 
+                    `Errado! ${nextCard.value}${nextCard.suit} - Você perdeu tudo!`, 'lose');
+                gameStates.hilo.gameActive = false;
+                document.getElementById('cashout-btn').disabled = true;
+            }
+
+            gameStates.hilo.currentCard = nextCard;
+            document.getElementById('current-card-display').textContent = 
+                `${nextCard.value}${nextCard.suit}`;
+        }
+
+        function cashoutHiLo() {
+            if (!gameStates.hilo.gameActive || gameStates.hilo.streak === 0) return;
+
+            const winAmount = Math.floor(gameStates.hilo.baseBet * gameStates.hilo.multiplier);
+            balance += winAmount;
+            updateBalance();
+            
+            showResult('hilo-result', 
+                `Retirada! Você ganhou ${winAmount} com ${gameStates.hilo.streak} acertos seguidos!`, 'win');
+            
+            gameStates.hilo.gameActive = false;
+            document.getElementById('cashout-btn').disabled = true;
+        }
+
+        function getCardNumericValue(card) {
+            if (card.value === 'A') return 1;
+            if (['J', 'Q', 'K'].includes(card.value)) return [11, 12, 13][['J', 'Q', 'K'].indexOf(card.value)];
+            return parseInt(card.value);
+        }
+
+        function toggleSlotsTurbo() {
+            slotsTurbo = !slotsTurbo;
+            const button = document.getElementById('slots-turbo-btn');
+            button.textContent = `Modo Turbo: ${slotsTurbo ? 'ON' : 'OFF'}`;
+        }
+
+        function toggleRechargeMenu() {
+            const menu = document.getElementById('recharge-menu');
+            if (menu.style.display === 'flex') {
+                menu.style.display = 'none';
+            } else {
+                menu.style.display = 'flex';
+            }
+        }
+
+        function addBalance() {
+            const amountInput = document.getElementById('recharge-amount');
+            const amount = parseInt(amountInput.value) || 0;
+
+            if (amount <= 0) {
+                alert('Por favor, insira um valor de recarga válido.');
+                return;
+            }
+
+            balance += amount;
+            updateBalance();
+            amountInput.value = ''; // Clear the input after adding
+            toggleRechargeMenu(); // Hide the menu after adding
+            alert(`Saldo recarregado com sucesso! Adicionado: $${amount}`);
+        }
+
+        // Mines
+        function startMines() {
+            const bet = parseInt(document.getElementById('mines-bet').value) || 0;
+            const minesCount = parseInt(document.getElementById('mines-count').value) || 3;
+            const gridSize = 5; // 5x5 grid
+            const totalTiles = gridSize * gridSize;
+
+            if (bet <= 0 || bet > balance) {
+                alert('Aposta inválida!');
+                return;
+            }
+
+            if (minesCount >= totalTiles) {
+                alert('Número de minas muito alto para o tamanho do grid!');
+                return;
+            }
+
+            balance -= bet;
+            updateBalance();
+
+            gameStates.mines.bet = bet;
+            gameStates.mines.minesCount = minesCount;
+            gameStates.mines.gameActive = true;
+            gameStates.mines.clearedTiles = 0;
+            gameStates.mines.grid = Array(gridSize).fill(0).map(() => Array(gridSize).fill(0)); // 0: hidden, 1: revealed safe, -1: revealed mine
+            gameStates.mines.mines = [];
+
+            // Place mines
+            while (gameStates.mines.mines.length < minesCount) {
+                const row = Math.floor(Math.random() * gridSize);
+                const col = Math.floor(Math.random() * gridSize);
+                const minePosition = `${row}-${col}`;
+
+                if (!gameStates.mines.mines.includes(minePosition)) {
+                    gameStates.mines.mines.push(minePosition);
+                }
+            }
+
+            // Generate grid HTML
+            const minesArea = document.getElementById('mines-area');
+            minesArea.innerHTML = '';
+            minesArea.style.display = 'grid';
+            minesArea.style.gridTemplateColumns = `repeat(${gridSize}, 40px)`;
+            minesArea.style.gap = '5px';
+            minesArea.style.margin = '20px auto';
+
+            for (let r = 0; r < gridSize; r++) {
+                for (let c = 0; c < gridSize; c++) {
+                    const tile = document.createElement('div');
+                    tile.className = 'mine-tile';
+                    tile.dataset.row = r;
+                    tile.dataset.col = c;
+                    tile.addEventListener('click', () => revealTile(r, c));
+                    minesArea.appendChild(tile);
+                }
+            }
+
+            document.getElementById('mines-start-btn').disabled = true;
+            document.getElementById('mines-cashout-btn').disabled = false;
+             showResult('mines-result', 'Jogo iniciado!', 'push');
+
+             // Initialize multiplier display
+             document.getElementById('mines-multiplier').textContent = '1x';
+        }
+
+        function revealTile(row, col) {
+            if (!gameStates.mines.gameActive || gameStates.mines.grid[row][col] !== 0) return; // Already revealed or game not active
+
+            const tile = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+            const minePosition = `${row}-${col}`;
+
+            if (gameStates.mines.mines.includes(minePosition)) {
+                // Hit a mine
+                tile.textContent = '💣';
+                tile.style.backgroundColor = '#e74c3c'; // Red background for mine
+                gameStates.mines.grid[row][col] = -1; // Mark as revealed mine
+                tile.dataset.state = 'revealed';
+                endMinesGame(false);
+            } else {
+                // Safe tile
+                tile.textContent = ''; // Or maybe a number of surrounding mines later
+                tile.style.backgroundColor = '#2ecc71'; // Green background for safe tile
+                gameStates.mines.grid[row][col] = 1; // Mark as revealed safe
+                tile.dataset.state = 'revealed';
+                gameStates.mines.clearedTiles++;
+
+                // Update multiplier display
+                const currentMultiplier = calculateMinesMultiplier();
+                document.getElementById('mines-multiplier').textContent = currentMultiplier.toFixed(2) + 'x';
+
+                // Check win condition
+                const totalTiles = gameStates.mines.grid.length * gameStates.mines.grid[0].length;
+                const safeTiles = totalTiles - gameStates.mines.minesCount;
+
+                if (gameStates.mines.clearedTiles === safeTiles) {
+                    endMinesGame(true);
+                }
+            }
+        }
+
+        function endMinesGame(won) {
+            gameStates.mines.gameActive = false;
+
+            // Reveal all mines
+            gameStates.mines.mines.forEach(minePos => {
+                const [row, col] = minePos.split('-').map(Number);
+                const tile = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
+                tile.textContent = '💣';
+                 tile.style.backgroundColor = '#e74c3c';
+            });
+
+            if (won) {
+                const potentialWin = calculateMinesWin();
+                balance += potentialWin;
+                updateBalance();
+                showResult('mines-result', `Parabéns! Você limpou o campo e ganhou ${potentialWin}!`, 'win');
+            } else {
+                 showResult('mines-result', 'Você atingiu uma mina! Fim de jogo.', 'lose');
+            }
+
+            document.getElementById('mines-start-btn').disabled = false;
+            document.getElementById('mines-cashout-btn').disabled = true;
+
+            // Reset multiplier display
+            document.getElementById('mines-multiplier').textContent = '1x';
+        }
+
+        // Helper function to calculate the current potential multiplier
+        function calculateMinesMultiplier() {
+            const totalTiles = 5 * 5; // 5x5 grid
+            const mines = gameStates.mines.minesCount;
+            const cleared = gameStates.mines.clearedTiles;
+
+            if (cleared === 0) return 1.0;
+
+            let multiplier = 1.0;
+            // The multiplier for clearing 'cleared' tiles is the inverse of the probability of
+            // picking 'cleared' safe tiles out of 'totalTiles - mines' safe tiles
+            // from 'totalTiles' total tiles.
+            // This can be calculated iteratively or using combinations.
+            // A simpler approximation based on risk:
+            // Multiplier grows faster with more cleared tiles and more mines.
+
+            // Using a formula that approximates the inverse probability
+            // This formula is simplified and can be adjusted for desired payout curves.
+            // As cleared tiles increase, the chance of hitting a mine on the next pick increases,
+            // especially with more mines. The multiplier should reflect this escalating risk.
+
+            // A potential formula: Multiplier = (TotalTiles / (TotalTiles - Mines)) * ((TotalTiles - 1) / (TotalTiles - Mines - 1)) * ...
+            // for 'cleared' terms.
+
+            // Let's use a calculation based on combinations, which is more accurate to the inverse probability.
+            // Probability of picking 'cleared' safe tiles from 'totalTiles' tiles with 'mines' mines is:
+            // C(TotalTiles - Mines, cleared) / C(TotalTiles, cleared)
+            // where C(n, k) = n! / (k! * (n-k)!)
+
+            // The multiplier would be the inverse of this probability:
+            // Multiplier = C(TotalTiles, cleared) / C(TotalTiles - Mines, cleared)
+
+            // We can calculate this iteratively to avoid large factorials.
+            // Multiplier = (TotalTiles / (TotalTiles - Mines)) * ((TotalTiles - 1) / (TotalTiles - Mines - 1)) * ... * ((TotalTiles - cleared + 1) / (TotalTiles - Mines - cleared + 1))
+
+            for (let i = 0; i < cleared; i++) {
+                multiplier *= (totalTiles - i) / (totalTiles - mines - i);
+            }
+
+            return Math.max(1.0, multiplier); // Ensure multiplier is at least 1.0x
+        }
+
+         function calculateMinesWin() {
+             // The win amount is the initial bet multiplied by the final multiplier achieved
+             return Math.floor(gameStates.mines.bet * calculateMinesMultiplier());
+         }
+
+         function cashoutMines() {
+             if (!gameStates.mines.gameActive) return;
+
+             const winAmount = calculateMinesWin();
+             balance += winAmount;
+             updateBalance();
+             showResult('mines-result', `Retirada! Você ganhou ${winAmount} com ${gameStates.mines.clearedTiles} tiles limpos.`, 'win');
+             endMinesGame(true); // End game as cashed out
+         }
+
+        // Number Guess
+        function makeGuess() {
+            const bet = parseInt(document.getElementById('guess-bet').value) || 0;
+            const guess = parseInt(document.getElementById('guess-number').value) || 0;
+            const feedbackElement = document.getElementById('guess-feedback');
+            const resultElement = document.getElementById('guess-result');
+
+            if (bet <= 0 || bet > balance) {
+                showResult('guess-result', 'Aposta inválida!', 'lose');
+                return;
+            }
+
+            if (guess < 1 || guess > 100) {
+                 showResult('guess-result', 'Palpite inválido! Escolha entre 1 e 100.', 'lose');
+                return;
+            }
+
+            if (!gameStates.numberGuess.gameActive) {
+                // Start new game
+                balance -= bet;
+                updateBalance();
+                gameStates.numberGuess.gameActive = true;
+                gameStates.numberGuess.targetNumber = Math.floor(Math.random() * 100) + 1;
+                 feedbackElement.textContent = 'Adivinhe um número entre 1 e 100.';
+                 resultElement.style.display = 'none';
+            }
+
+            if (guess === gameStates.numberGuess.targetNumber) {
+                const winAmount = bet * 1000; // 1000x multiplier
+                balance += winAmount;
+                updateBalance();
+                showResult('guess-result', `Parabéns! Você acertou o número ${gameStates.numberGuess.targetNumber} e ganhou ${winAmount}!`, 'win');
+                gameStates.numberGuess.gameActive = false;
+            } else if (guess < gameStates.numberGuess.targetNumber) {
+                feedbackElement.textContent = 'Muito baixo!';
+                 showResult('guess-result', 'Você perdeu a aposta! O número era ' + gameStates.numberGuess.targetNumber, 'lose');
+                 gameStates.numberGuess.gameActive = false;
+                 updateBalance(); // Deduct bet on loss
+            } else {
+                feedbackElement.textContent = 'Muito alto!';
+                 showResult('guess-result', 'Você perdeu a aposta! O número era ' + gameStates.numberGuess.targetNumber, 'lose');
+                 gameStates.numberGuess.gameActive = false;
+                 updateBalance(); // Deduct bet on loss
+            }
+        }
+
+        // Crash (Aviator)
+        function startGameInterval() {
+            const multiplierDisplay = document.getElementById('crash-multiplier');
+            gameStates.crash.currentMultiplier = 1.00;
+            // Calculate crash point - make it harder if previous round was low
+            let baseCrashPoint;
+            // Dynamic difficulty: Higher chance of very low crash after a low crash.
+            // Adjusting ranges and probabilities.
+            if (gameStates.crash.previousCrashPoint > 5) { // Previous round was high
+                 baseCrashPoint = Math.random() * 5 + 2.0; // Next is likely high (2.0x to 7.0x)
+            } else if (gameStates.crash.previousCrashPoint > 2) { // Previous round was medium
+                 baseCrashPoint = Math.random() * 3 + 1.5; // Next is likely medium (1.5x to 4.5x)
+            } else { // Previous round was low (<= 2) or first round
+                // Increased probability for very low crash (1.01x to 2.0x)
+                if (Math.random() < 0.7) { // 70% chance of a low crash after a low/first round
+                    baseCrashPoint = Math.random() * 1.0 + 1.01; // Very low range (1.01x to 2.01x)
+                } else { // 30% chance of a medium crash even after a low round
+                     baseCrashPoint = Math.random() * 2.5 + 2.0; // Medium range (2.0x to 4.5x)
+                }
+            }
+            gameStates.crash.crashPoint = Math.max(1.01, baseCrashPoint); // Ensure crash point is at least 1.01x
+
+            gameStates.crash.graphPoints = [{ x: 0, y: 1.00 }]; // Start point for the graph
+
+            let timeElapsed = 0; // Track time elapsed in the round
+
+            gameStates.crash.gameInterval = setInterval(() => {
+                timeElapsed += 100; // Increment time by interval (ms)
+                // Exponential growth formula: multiplier = e^(rate * time)
+                // We need to choose a rate that feels good. A higher rate makes it go up faster.
+                // Let's approximate a rate. If we want to reach, say, 5x in 10 seconds (10000 ms)
+                // 5 = e^(rate * 10000) => ln(5) = rate * 10000 => rate = ln(5) / 10000 approx 1.6 / 10000 = 0.00016
+                const growthRate = 0.00016; // Adjust this value to change curve steepness
+                gameStates.crash.currentMultiplier = Math.exp(growthRate * timeElapsed);
+
+                multiplierDisplay.textContent = `${gameStates.crash.currentMultiplier.toFixed(2)}x`;
+
+                // Store point for the graph (x is time/step, y is multiplier)
+                gameStates.crash.graphPoints.push({ x: gameStates.crash.graphPoints.length, y: gameStates.crash.currentMultiplier });
+
+                drawCrashGraph(); // Draw the updated graph
+
+                // Check for auto cashout
+                if (gameStates.crash.playerInRound && gameStates.crash.autoCashout > 1.00 && gameStates.crash.currentMultiplier >= gameStates.crash.autoCashout) {
+                    cashoutCrash();
+                }
+
+                // Check for crash
+                if (gameStates.crash.currentMultiplier >= gameStates.crash.crashPoint) {
+                    endCrashRound(true); // Game crashed (pass true to indicate crash)
+                }
+            }, 100); // Update every 100ms
+        }
+
+        function placeCrashBet() {
+            if (gameStates.crash.gameActive) {
+                alert('Uma rodada já está em andamento!');
+                return;
+            }
+
+            const bet = parseFloat(document.getElementById('crash-bet').value) || 0;
+            const autoCashout = parseFloat(document.getElementById('crash-auto-cashout').value) || 0;
+
+            if (bet <= 0 || bet > balance) {
+                alert('Aposta inválida ou saldo insuficiente!');
+                return;
+            }
+
+            balance -= bet;
+            updateBalance();
+
+            gameStates.crash.bet = bet;
+            gameStates.crash.autoCashout = autoCashout;
+            gameStates.crash.gameActive = true;
+            gameStates.crash.playerInRound = true;
+
+            document.getElementById('crash-place-bet-btn').disabled = true;
+            document.getElementById('crash-cashout-btn').disabled = false;
+
+            showResult('crash-result', 'Aposta feita! O avião está subindo...', 'push');
+
+            // Start the game interval after a short delay for dramatic effect
+            setTimeout(startGameInterval, 1000);
+        }
+
+        function cashoutCrash() {
+            if (!gameStates.crash.gameActive || !gameStates.crash.playerInRound) return;
+
+            const winAmount = gameStates.crash.bet * gameStates.crash.currentMultiplier;
+            balance += winAmount;
+            updateBalance();
+
+            showResult('crash-result', `Retirada! Você ganhou $${winAmount.toFixed(2)} com ${gameStates.crash.currentMultiplier.toFixed(2)}x!`, 'win');
+
+            gameStates.crash.playerInRound = false;
+            document.getElementById('crash-cashout-btn').disabled = true;
+            endCrashRound(false); // End the round immediately for the player
+        }
+
+        function endCrashRound(crashed) {
+            clearInterval(gameStates.crash.gameInterval);
+            gameStates.crash.gameActive = false;
+            gameStates.crash.playerInRound = false; // Ensure playerInRound is false
+
+            document.getElementById('crash-place-bet-btn').disabled = false;
+            document.getElementById('crash-cashout-btn').disabled = true;
+
+            if (crashed) {
+                 showResult('crash-result', `Crash em ${gameStates.crash.crashPoint.toFixed(2)}x! Você perdeu a aposta.`, 'lose');
+                 gameStates.crash.previousCrashPoint = gameStates.crash.crashPoint; // Store crash point if it crashed
+            } else {
+                // Player cashed out - result already shown in cashoutCrash
+                // previousCrashPoint is updated when the actual crash occurs in the interval check.
+            }
+
+            // Clear graph and reset multiplier display after a delay
+            const canvas = document.getElementById('crash-graph');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            gameStates.crash.graphPoints = []; // Clear graph points
+
+             // Reset multiplier display after a delay
+             setTimeout(() => {
+                 document.getElementById('crash-multiplier').textContent = '1.00x';
+                 document.getElementById('crash-result').style.display = 'none';
+             }, 3000); // Display crash point for 3 seconds
+         }
+
+        function drawCrashGraph() {
+            const canvas = document.getElementById('crash-graph');
+            const ctx = canvas.getContext('2d');
+            const { width, height } = canvas;
+
+            // Clear canvas
+            ctx.clearRect(0, 0, width, height);
+
+            // Draw axis
+            ctx.beginPath();
+            ctx.strokeStyle = '#555';
+            ctx.moveTo(0, height);
+            ctx.lineTo(width, height); // X-axis
+            ctx.moveTo(0, height);
+            ctx.lineTo(0, 0); // Y-axis
+            ctx.stroke();
+
+            // Draw the line
+            if (gameStates.crash.graphPoints.length > 1) {
+                ctx.beginPath();
+                ctx.strokeStyle = '#ffd700'; // Yellow line
+                ctx.lineWidth = 2;
+
+                // Dynamic scaling based on the maximum multiplier reached and time elapsed
+                const maxMultiplierReached = gameStates.crash.graphPoints.reduce((max, point) => Math.max(max, point.y), 0);
+                // Scale Y to always show a bit above the max reached multiplier, with a minimum range
+                const displayRangeY = Math.max(10, maxMultiplierReached * 1.2); 
+                const yScale = height / displayRangeY;
+
+                // Calculate total time elapsed to scale the X axis
+                const totalTime = (gameStates.crash.graphPoints.length - 1) * 100; // Time in milliseconds
+                // Scale X dynamically based on the total time, ensuring a minimum visible time frame
+                const maxDisplayTime = Math.max(15000, totalTime * 1.2); // Display at least 15s, with buffer
+                const xScale = width / (maxDisplayTime / 1000); // Scale X to fit max display time (convert ms to seconds)
+
+                // Move to the first point (start at bottom left - 0 time, 1x multiplier)
+                // The first point in graphPoints is {x: 0, y: 1.00}, representing time=0, multiplier=1
+                // Canvas coordinates: x=0 (left edge), y=height (bottom edge)
+                ctx.moveTo(0, height - gameStates.crash.graphPoints[0].y * yScale); // Should be height - 1.00 * yScale initially
+
+                // Draw lines to subsequent points
+                for (let i = 1; i < gameStates.crash.graphPoints.length; i++) {
+                    const point = gameStates.crash.graphPoints[i];
+                    // Calculate canvas coordinates for the current point
+                    const pointTime = i * 100; // Time in milliseconds for this point
+                    const x = (pointTime / 1000) * xScale; // Scale time to canvas width
+                    const y = height - point.y * yScale; // Scale multiplier to canvas height (inverted)
+
+                    // Clamp coordinates to stay within canvas bounds
+                    const clampedX = Math.max(0, Math.min(width, x));
+                    const clampedY = Math.max(0, Math.min(height, y));
+
+                    // Draw line segment to the clamped point
+                    ctx.lineTo(clampedX, clampedY);
+                 }
+
+                ctx.stroke();
+
+                 // Draw crash point if game ended by crashing
+                 if (!gameStates.crash.gameActive && gameStates.crash.crashPoint > 0) {
+                     // Calculate exact crash point coordinates on the graph
+                     // Using the time it takes to reach the crash point with the exponential growth rate
+                     const exactCrashTime = (Math.log(gameStates.crash.crashPoint) / gameStates.crash.growthRate) * 1000; // Time in ms
+                     const displayCrashX = (exactCrashTime / 1000) * xScale; // Scale time to canvas X
+                     const displayCrashY = height - gameStates.crash.crashPoint * yScale; // Scale multiplier to canvas Y
+
+                     // Ensure text is within canvas bounds
+                     const textX = Math.min(width - 40, Math.max(40, displayCrashX));
+                     const textY = Math.max(20, displayCrashY - 10);
+
+                     ctx.font = '16px Arial';
+                     ctx.fillStyle = 'red';
+                     ctx.textAlign = 'center';
+                     ctx.fillText(`Crash! ${gameStates.crash.crashPoint.toFixed(2)}x`, textX, textY);
+                 }
+            }
+        }
+
+        // Inicialização
+        updateBalance();
+    </script>
+</body>
+</html>
