@@ -31,24 +31,24 @@
         }
 
         .casino-logo {
-            height: 120px; /* Slightly larger logo */
-            margin-right: auto; /* Pushes balance and menu to the right */
+            height: 120px; 
+            margin-right: auto; 
         }
 
         .balance {
-            font-size: 28px; /* Increased size for balance */
+            font-size: 28px; 
             color: #ffd700;
-            margin: 0 auto; /* Centers the balance */
+            margin: 0 auto; 
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
 
         .recharge-menu-container {
             position: relative;
-            margin-left: auto; /* Pushes menu to the right */
+            margin-left: auto; 
         }
 
         .menu-icon {
-            font-size: 120px; /* Match logo height */
+            font-size: 120px; 
             cursor: pointer;
             margin-left: 20px;
         }
@@ -62,7 +62,7 @@
             border-radius: 8px;
             padding: 15px;
             z-index: 100;
-            display: none; /* Initially hidden */
+            display: none; 
             flex-direction: column;
             gap: 10px;
         }
@@ -383,7 +383,6 @@
             flex-wrap: wrap;
         }
 
-        /* Specific styles for Crash game elements */
         #crash-graph {
             background-color: rgba(0, 0, 0, 0.2);
             margin: 10px auto;
@@ -571,7 +570,6 @@
                 Multiplicador Atual: <span id="mines-multiplier">1x</span>
             </div>
             <div class="game-area" id="mines-area">
-                <!-- Mines grid will be generated here by JS -->
             </div>
             <button class="btn" id="mines-start-btn" onclick="startMines()">Iniciar Jogo</button>
             <button class="btn" id="mines-cashout-btn" onclick="cashoutMines()" disabled>Retirar</button>
@@ -620,11 +618,11 @@
             numberGuess: { targetNumber: null, gameActive: false },
             crash: { gameActive: false, bet: 0, autoCashout: 0, currentMultiplier: 1.00, crashPoint: 0, gameInterval: null, playerInRound: false,
                     graphPoints: [],
-                    previousCrashPoint: 0 // Store the crash point of the previous round
+                    previousCrashPoint: 0 
                 }
         };
 
-        let slotsTurbo = false; // State for slots turbo mode
+        let slotsTurbo = false; 
 
         function updateBalance() {
             document.getElementById('balance').textContent = balance.toLocaleString();
@@ -870,7 +868,7 @@
             balance -= bet;
             updateBalance();
 
-            const number = Math.floor(Math.random() * 37); // 0-36
+            const number = Math.floor(Math.random() * 37); 
             const betType = document.getElementById('roulette-type').value;
             const wheel = document.getElementById('roulette-wheel');
             
@@ -1153,8 +1151,8 @@
 
             balance += amount;
             updateBalance();
-            amountInput.value = ''; // Clear the input after adding
-            toggleRechargeMenu(); // Hide the menu after adding
+            amountInput.value = ''; 
+            toggleRechargeMenu(); 
             alert(`Saldo recarregado com sucesso! Adicionado: $${amount}`);
         }
 
@@ -1162,7 +1160,7 @@
         function startMines() {
             const bet = parseInt(document.getElementById('mines-bet').value) || 0;
             const minesCount = parseInt(document.getElementById('mines-count').value) || 3;
-            const gridSize = 5; // 5x5 grid
+            const gridSize = 5; 
             const totalTiles = gridSize * gridSize;
 
             if (bet <= 0 || bet > balance) {
@@ -1196,7 +1194,6 @@
                 }
             }
 
-            // Generate grid HTML
             const minesArea = document.getElementById('mines-area');
             minesArea.innerHTML = '';
             minesArea.style.display = 'grid';
@@ -1219,36 +1216,31 @@
             document.getElementById('mines-cashout-btn').disabled = false;
              showResult('mines-result', 'Jogo iniciado!', 'push');
 
-             // Initialize multiplier display
              document.getElementById('mines-multiplier').textContent = '1x';
         }
 
         function revealTile(row, col) {
-            if (!gameStates.mines.gameActive || gameStates.mines.grid[row][col] !== 0) return; // Already revealed or game not active
-
+            if (!gameStates.mines.gameActive || gameStates.mines.grid[row][col] !== 0) return; 
             const tile = document.querySelector(`[data-row="${row}"][data-col="${col}"]`);
             const minePosition = `${row}-${col}`;
 
             if (gameStates.mines.mines.includes(minePosition)) {
                 // Hit a mine
                 tile.textContent = '💣';
-                tile.style.backgroundColor = '#e74c3c'; // Red background for mine
-                gameStates.mines.grid[row][col] = -1; // Mark as revealed mine
+                tile.style.backgroundColor = '#e74c3c'; 
+                gameStates.mines.grid[row][col] = -1; 
                 tile.dataset.state = 'revealed';
                 endMinesGame(false);
             } else {
-                // Safe tile
-                tile.textContent = ''; // Or maybe a number of surrounding mines later
-                tile.style.backgroundColor = '#2ecc71'; // Green background for safe tile
-                gameStates.mines.grid[row][col] = 1; // Mark as revealed safe
+                tile.textContent = ''; 
+                tile.style.backgroundColor = '#2ecc71'; 
+                gameStates.mines.grid[row][col] = 1; 
                 tile.dataset.state = 'revealed';
                 gameStates.mines.clearedTiles++;
 
-                // Update multiplier display
                 const currentMultiplier = calculateMinesMultiplier();
                 document.getElementById('mines-multiplier').textContent = currentMultiplier.toFixed(2) + 'x';
 
-                // Check win condition
                 const totalTiles = gameStates.mines.grid.length * gameStates.mines.grid[0].length;
                 const safeTiles = totalTiles - gameStates.mines.minesCount;
 
@@ -1281,11 +1273,9 @@
             document.getElementById('mines-start-btn').disabled = false;
             document.getElementById('mines-cashout-btn').disabled = true;
 
-            // Reset multiplier display
             document.getElementById('mines-multiplier').textContent = '1x';
         }
 
-        // Helper function to calculate the current potential multiplier
         function calculateMinesMultiplier() {
             const totalTiles = 5 * 5; // 5x5 grid
             const mines = gameStates.mines.minesCount;
@@ -1294,31 +1284,7 @@
             if (cleared === 0) return 1.0;
 
             let multiplier = 1.0;
-            // The multiplier for clearing 'cleared' tiles is the inverse of the probability of
-            // picking 'cleared' safe tiles out of 'totalTiles - mines' safe tiles
-            // from 'totalTiles' total tiles.
-            // This can be calculated iteratively or using combinations.
-            // A simpler approximation based on risk:
-            // Multiplier grows faster with more cleared tiles and more mines.
-
-            // Using a formula that approximates the inverse probability
-            // This formula is simplified and can be adjusted for desired payout curves.
-            // As cleared tiles increase, the chance of hitting a mine on the next pick increases,
-            // especially with more mines. The multiplier should reflect this escalating risk.
-
-            // A potential formula: Multiplier = (TotalTiles / (TotalTiles - Mines)) * ((TotalTiles - 1) / (TotalTiles - Mines - 1)) * ...
-            // for 'cleared' terms.
-
-            // Let's use a calculation based on combinations, which is more accurate to the inverse probability.
-            // Probability of picking 'cleared' safe tiles from 'totalTiles' tiles with 'mines' mines is:
-            // C(TotalTiles - Mines, cleared) / C(TotalTiles, cleared)
-            // where C(n, k) = n! / (k! * (n-k)!)
-
-            // The multiplier would be the inverse of this probability:
-            // Multiplier = C(TotalTiles, cleared) / C(TotalTiles - Mines, cleared)
-
-            // We can calculate this iteratively to avoid large factorials.
-            // Multiplier = (TotalTiles / (TotalTiles - Mines)) * ((TotalTiles - 1) / (TotalTiles - Mines - 1)) * ... * ((TotalTiles - cleared + 1) / (TotalTiles - Mines - cleared + 1))
+           
 
             for (let i = 0; i < cleared; i++) {
                 multiplier *= (totalTiles - i) / (totalTiles - mines - i);
@@ -1342,7 +1308,6 @@
              endMinesGame(true); // End game as cashed out
          }
 
-        // Number Guess
         function makeGuess() {
             const bet = parseInt(document.getElementById('guess-bet').value) || 0;
             const guess = parseInt(document.getElementById('guess-number').value) || 0;
@@ -1370,7 +1335,7 @@
             }
 
             if (guess === gameStates.numberGuess.targetNumber) {
-                const winAmount = bet * 1000; // 1000x multiplier
+                const winAmount = bet * 1000; 
                 balance += winAmount;
                 updateBalance();
                 showResult('guess-result', `Parabéns! Você acertou o número ${gameStates.numberGuess.targetNumber} e ganhou ${winAmount}!`, 'win');
@@ -1379,12 +1344,12 @@
                 feedbackElement.textContent = 'Muito baixo!';
                  showResult('guess-result', 'Você perdeu a aposta! O número era ' + gameStates.numberGuess.targetNumber, 'lose');
                  gameStates.numberGuess.gameActive = false;
-                 updateBalance(); // Deduct bet on loss
+                 updateBalance(); 
             } else {
                 feedbackElement.textContent = 'Muito alto!';
                  showResult('guess-result', 'Você perdeu a aposta! O número era ' + gameStates.numberGuess.targetNumber, 'lose');
                  gameStates.numberGuess.gameActive = false;
-                 updateBalance(); // Deduct bet on loss
+                 updateBalance(); 
             }
         }
 
@@ -1392,54 +1357,43 @@
         function startGameInterval() {
             const multiplierDisplay = document.getElementById('crash-multiplier');
             gameStates.crash.currentMultiplier = 1.00;
-            // Calculate crash point - make it harder if previous round was low
             let baseCrashPoint;
-            // Dynamic difficulty: Higher chance of very low crash after a low crash.
-            // Adjusting ranges and probabilities.
-            if (gameStates.crash.previousCrashPoint > 5) { // Previous round was high
-                 baseCrashPoint = Math.random() * 5 + 2.0; // Next is likely high (2.0x to 7.0x)
-            } else if (gameStates.crash.previousCrashPoint > 2) { // Previous round was medium
-                 baseCrashPoint = Math.random() * 3 + 1.5; // Next is likely medium (1.5x to 4.5x)
-            } else { // Previous round was low (<= 2) or first round
-                // Increased probability for very low crash (1.01x to 2.0x)
-                if (Math.random() < 0.7) { // 70% chance of a low crash after a low/first round
-                    baseCrashPoint = Math.random() * 1.0 + 1.01; // Very low range (1.01x to 2.01x)
-                } else { // 30% chance of a medium crash even after a low round
-                     baseCrashPoint = Math.random() * 2.5 + 2.0; // Medium range (2.0x to 4.5x)
+            if (gameStates.crash.previousCrashPoint > 5) { 
+                 baseCrashPoint = Math.random() * 5 + 2.0; 
+            } else if (gameStates.crash.previousCrashPoint > 2) {
+                 baseCrashPoint = Math.random() * 3 + 1.5; 
+            } else { 
+                if (Math.random() < 0.7) { 
+                    baseCrashPoint = Math.random() * 1.0 + 1.01; 
+                } else { 
+                     baseCrashPoint = Math.random() * 2.5 + 2.0; 
                 }
             }
-            gameStates.crash.crashPoint = Math.max(1.01, baseCrashPoint); // Ensure crash point is at least 1.01x
+            gameStates.crash.crashPoint = Math.max(1.01, baseCrashPoint); 
 
-            gameStates.crash.graphPoints = [{ x: 0, y: 1.00 }]; // Start point for the graph
+            gameStates.crash.graphPoints = [{ x: 0, y: 1.00 }]; 
 
-            let timeElapsed = 0; // Track time elapsed in the round
+            let timeElapsed = 0; 
 
             gameStates.crash.gameInterval = setInterval(() => {
-                timeElapsed += 100; // Increment time by interval (ms)
-                // Exponential growth formula: multiplier = e^(rate * time)
-                // We need to choose a rate that feels good. A higher rate makes it go up faster.
-                // Let's approximate a rate. If we want to reach, say, 5x in 10 seconds (10000 ms)
-                // 5 = e^(rate * 10000) => ln(5) = rate * 10000 => rate = ln(5) / 10000 approx 1.6 / 10000 = 0.00016
-                const growthRate = 0.00016; // Adjust this value to change curve steepness
+                timeElapsed += 100; 
+                const growthRate = 0.00016; 
                 gameStates.crash.currentMultiplier = Math.exp(growthRate * timeElapsed);
 
                 multiplierDisplay.textContent = `${gameStates.crash.currentMultiplier.toFixed(2)}x`;
 
-                // Store point for the graph (x is time/step, y is multiplier)
                 gameStates.crash.graphPoints.push({ x: gameStates.crash.graphPoints.length, y: gameStates.crash.currentMultiplier });
 
-                drawCrashGraph(); // Draw the updated graph
+                drawCrashGraph(); 
 
-                // Check for auto cashout
                 if (gameStates.crash.playerInRound && gameStates.crash.autoCashout > 1.00 && gameStates.crash.currentMultiplier >= gameStates.crash.autoCashout) {
                     cashoutCrash();
                 }
 
-                // Check for crash
                 if (gameStates.crash.currentMultiplier >= gameStates.crash.crashPoint) {
-                    endCrashRound(true); // Game crashed (pass true to indicate crash)
+                    endCrashRound(true); 
                 }
-            }, 100); // Update every 100ms
+            }, 100); 
         }
 
         function placeCrashBet() {
@@ -1469,7 +1423,6 @@
 
             showResult('crash-result', 'Aposta feita! O avião está subindo...', 'push');
 
-            // Start the game interval after a short delay for dramatic effect
             setTimeout(startGameInterval, 1000);
         }
 
@@ -1484,36 +1437,33 @@
 
             gameStates.crash.playerInRound = false;
             document.getElementById('crash-cashout-btn').disabled = true;
-            endCrashRound(false); // End the round immediately for the player
+            endCrashRound(false); 
         }
 
         function endCrashRound(crashed) {
             clearInterval(gameStates.crash.gameInterval);
             gameStates.crash.gameActive = false;
-            gameStates.crash.playerInRound = false; // Ensure playerInRound is false
+            gameStates.crash.playerInRound = false; 
 
             document.getElementById('crash-place-bet-btn').disabled = false;
             document.getElementById('crash-cashout-btn').disabled = true;
 
             if (crashed) {
                  showResult('crash-result', `Crash em ${gameStates.crash.crashPoint.toFixed(2)}x! Você perdeu a aposta.`, 'lose');
-                 gameStates.crash.previousCrashPoint = gameStates.crash.crashPoint; // Store crash point if it crashed
+                 gameStates.crash.previousCrashPoint = gameStates.crash.crashPoint; 
             } else {
-                // Player cashed out - result already shown in cashoutCrash
-                // previousCrashPoint is updated when the actual crash occurs in the interval check.
+
             }
 
-            // Clear graph and reset multiplier display after a delay
             const canvas = document.getElementById('crash-graph');
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            gameStates.crash.graphPoints = []; // Clear graph points
+            gameStates.crash.graphPoints = []; 
 
-             // Reset multiplier display after a delay
              setTimeout(() => {
                  document.getElementById('crash-multiplier').textContent = '1.00x';
                  document.getElementById('crash-result').style.display = 'none';
-             }, 3000); // Display crash point for 3 seconds
+             }, 3000); 
          }
 
         function drawCrashGraph() {
@@ -1521,68 +1471,51 @@
             const ctx = canvas.getContext('2d');
             const { width, height } = canvas;
 
-            // Clear canvas
             ctx.clearRect(0, 0, width, height);
 
-            // Draw axis
             ctx.beginPath();
             ctx.strokeStyle = '#555';
             ctx.moveTo(0, height);
-            ctx.lineTo(width, height); // X-axis
+            ctx.lineTo(width, height); 
             ctx.moveTo(0, height);
-            ctx.lineTo(0, 0); // Y-axis
+            ctx.lineTo(0, 0); 
             ctx.stroke();
 
-            // Draw the line
             if (gameStates.crash.graphPoints.length > 1) {
                 ctx.beginPath();
-                ctx.strokeStyle = '#ffd700'; // Yellow line
+                ctx.strokeStyle = '#ffd700'; 
                 ctx.lineWidth = 2;
 
-                // Dynamic scaling based on the maximum multiplier reached and time elapsed
                 const maxMultiplierReached = gameStates.crash.graphPoints.reduce((max, point) => Math.max(max, point.y), 0);
-                // Scale Y to always show a bit above the max reached multiplier, with a minimum range
                 const displayRangeY = Math.max(10, maxMultiplierReached * 1.2); 
                 const yScale = height / displayRangeY;
 
-                // Calculate total time elapsed to scale the X axis
-                const totalTime = (gameStates.crash.graphPoints.length - 1) * 100; // Time in milliseconds
-                // Scale X dynamically based on the total time, ensuring a minimum visible time frame
-                const maxDisplayTime = Math.max(15000, totalTime * 1.2); // Display at least 15s, with buffer
-                const xScale = width / (maxDisplayTime / 1000); // Scale X to fit max display time (convert ms to seconds)
+                const totalTime = (gameStates.crash.graphPoints.length - 1) * 100; 
+                const maxDisplayTime = Math.max(15000, totalTime * 1.2); 
+                const xScale = width / (maxDisplayTime / 1000); 
 
-                // Move to the first point (start at bottom left - 0 time, 1x multiplier)
-                // The first point in graphPoints is {x: 0, y: 1.00}, representing time=0, multiplier=1
-                // Canvas coordinates: x=0 (left edge), y=height (bottom edge)
-                ctx.moveTo(0, height - gameStates.crash.graphPoints[0].y * yScale); // Should be height - 1.00 * yScale initially
+                ctx.moveTo(0, height - gameStates.crash.graphPoints[0].y * yScale); 
 
-                // Draw lines to subsequent points
                 for (let i = 1; i < gameStates.crash.graphPoints.length; i++) {
                     const point = gameStates.crash.graphPoints[i];
-                    // Calculate canvas coordinates for the current point
-                    const pointTime = i * 100; // Time in milliseconds for this point
-                    const x = (pointTime / 1000) * xScale; // Scale time to canvas width
-                    const y = height - point.y * yScale; // Scale multiplier to canvas height (inverted)
+                    const pointTime = i * 100; 
+                    const x = (pointTime / 1000) * xScale;
+                    const y = height - point.y * yScale; 
 
-                    // Clamp coordinates to stay within canvas bounds
                     const clampedX = Math.max(0, Math.min(width, x));
                     const clampedY = Math.max(0, Math.min(height, y));
 
-                    // Draw line segment to the clamped point
                     ctx.lineTo(clampedX, clampedY);
                  }
 
                 ctx.stroke();
 
-                 // Draw crash point if game ended by crashing
                  if (!gameStates.crash.gameActive && gameStates.crash.crashPoint > 0) {
-                     // Calculate exact crash point coordinates on the graph
-                     // Using the time it takes to reach the crash point with the exponential growth rate
-                     const exactCrashTime = (Math.log(gameStates.crash.crashPoint) / gameStates.crash.growthRate) * 1000; // Time in ms
-                     const displayCrashX = (exactCrashTime / 1000) * xScale; // Scale time to canvas X
-                     const displayCrashY = height - gameStates.crash.crashPoint * yScale; // Scale multiplier to canvas Y
 
-                     // Ensure text is within canvas bounds
+                     const exactCrashTime = (Math.log(gameStates.crash.crashPoint) / gameStates.crash.growthRate) * 1000; 
+                     const displayCrashX = (exactCrashTime / 1000) * xScale; 
+                     const displayCrashY = height - gameStates.crash.crashPoint * yScale; 
+
                      const textX = Math.min(width - 40, Math.max(40, displayCrashX));
                      const textY = Math.max(20, displayCrashY - 10);
 
@@ -1594,7 +1527,6 @@
             }
         }
 
-        // Inicialização
         updateBalance();
     </script>
 </body>
